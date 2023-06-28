@@ -1,5 +1,13 @@
+import asyncio
+from bot import bot
+
+
+
+
+
+
 def main():
-    pass
+    asyncio.run(bot.polling())
 
 
 if __name__ == '__main__':
