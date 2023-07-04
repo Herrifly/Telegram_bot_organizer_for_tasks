@@ -27,6 +27,7 @@ class Tasks(Base):
     priority: enum.Enum = sq.Column(sq.Enum(PriorityLevel))
     status: enum.Enum = sq.Column(sq.Enum(Status))
 
+    user_id: int = sq.Column(sq.Integer, sq.ForeignKey('users.id'))
     @classmethod
     def insert(cls, title: str, description: str, deadline: Date, priority: PriorityLevel, status: Status):
         db_session.execute(
