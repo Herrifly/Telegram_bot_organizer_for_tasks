@@ -30,10 +30,8 @@ class Users(Base):
 
         db_session.commit()
 
-
     @classmethod
     def select(cls, user_id: int):
-
         result = db_session.execute(
             text(
                 """SELECT user_id FROM users WHERE user_id = :user_id"""
@@ -47,3 +45,15 @@ class Users(Base):
 
         return result.fetchall()
 
+    @classmethod
+    def get_id_by_user_id(cls, user_id: int):
+        result = db_session.execute(
+            text(
+                '''SELECT id from users WHERE user_id = :user_id;'''
+            ),
+            params=
+            {
+                'user_id': user_id
+            }
+        )
+        return result.fetchone().id

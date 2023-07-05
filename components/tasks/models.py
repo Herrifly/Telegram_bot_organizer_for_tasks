@@ -24,25 +24,26 @@ class Tasks(Base):
     title: str = sq.Column(sq.String)
     description: str = sq.Column(sq.String)
     deadline: Date = sq.Column(Date)
-    priority: enum.Enum = sq.Column(sq.Enum(PriorityLevel))
-    status: enum.Enum = sq.Column(sq.Enum(Status))
+    priority: str = sq.Column(sq.String)
+    status: str = sq.Column(sq.String)
 
-    user_id: int = sq.Column(sq.Integer, sq.ForeignKey('users.id'))
+    user_id: int = sq.Column(sq.Integer, sq.ForeignKey('users.id'), nullable=False)
 
     @classmethod
-    def insert(cls, title: str, description: str, deadline: Date, priority: PriorityLevel, status: Status):
+    def insert(cls, title: str, description: str, deadline: Date, priority: str, status: str, user_id: int):
         db_session.execute(
             text(
-                """INSERT INTO tasks (title, description, deadline, priority, status)
-                VALUES (:title, :description, :deadline, :priority, :status);"""
+                """INSERT INTO tasks (title, description, deadline, priority, status, user_id)
+                VALUES (:title, :description, :deadline, :priority, :status, :user_id);"""
 
             ),
             params={
                 'title': title,
                 'description': description,
                 'deadline': deadline,
-                'priority': priority.name,
-                'status': status.name
+                'priority': priority,
+                'status': status,
+                'user_id': user_id
             }
         )
 
@@ -54,7 +55,7 @@ class Tasks(Base):
             text(
                 '''SELECT title, description, deadline, priority, status FROM tasks
                  JOIN users ON users.id = tasks.user_id
-                 WHERE users.user_id = :user_tg_id and status = 'waiting';'''
+                 WHERE users.user_id = :user_tg_id and status = 'в ожидании';'''
             ),
             params=
             {
@@ -70,7 +71,7 @@ class Tasks(Base):
             text(
                 '''SELECT title, description, deadline, priority, status FROM tasks
                  JOIN users ON users.id = tasks.user_id
-                 WHERE users.user_id = :user_tg_id and status = 'in_progress';'''
+                 WHERE users.user_id = :user_tg_id and status = 'в процессе';'''
             ),
             params=
             {
@@ -86,7 +87,7 @@ class Tasks(Base):
             text(
                 '''SELECT title, description, deadline, priority, status FROM tasks
                  JOIN users ON users.id = tasks.user_id
-                 WHERE users.user_id = :user_tg_id and status = 'completed';'''
+                 WHERE users.user_id = :user_tg_id and status = 'завершено';'''
             ),
             params=
             {

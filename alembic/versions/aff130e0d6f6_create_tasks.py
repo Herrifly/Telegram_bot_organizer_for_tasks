@@ -23,8 +23,8 @@ def upgrade() -> None:
     sa.Column('title', sa.String(), nullable=True),
     sa.Column('description', sa.String(), nullable=True),
     sa.Column('deadline', sa.Date(), nullable=True),
-    sa.Column('priority', sa.Enum('A', 'B', 'C', name='prioritylevel'), nullable=True),
-    sa.Column('status', sa.Enum('waiting', 'in_progress', 'completed', name='status'), nullable=True),
+    sa.Column('priority', sa.String(), nullable=True),
+    sa.Column('status', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
